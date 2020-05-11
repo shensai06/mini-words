@@ -1,9 +1,6 @@
 const config = {
-  projectName: 'my-min-app',
-  date: '2020-5-10',
-  h5: {
-    esnextModules: ['taro-ui']
-  },
+  projectName: 'mini-app-code',
+  date: '2020-5-11',
   designWidth: 750,
   deviceRatio: {
     '640': 2.34 / 2,

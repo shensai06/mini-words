@@ -1,7 +1,5 @@
-import { ComponentClass } from 'react'
-import Taro, { Component, Config } from '@tarojs/taro'
+import Taro from '@tarojs/taro'
 import { View, Button, Text } from '@tarojs/components'
-import { connect } from '@tarojs/redux'
 import { useEffect, useLayoutEffect, useReducer, useState, useContext, useRef, useCallback, useMemo } from '@tarojs/taro'
 import { AtInput, AtForm,AtButton } from 'taro-ui'
 import './index.less'

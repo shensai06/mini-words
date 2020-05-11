@@ -1,7 +1,8 @@
 {
-	"miniprogramRoot": "dist/",
-	"projectname": "my-min-app",
-	"description": "前端记单词",
+	"miniprogramRoot": "client/dist/",
+	"cloudfunctionRoot": "cloud/functions/",
+	"projectname": "mini-app-code",
+	"description": "英文单词",
 	"appid": "wx9bb9ad5347592420",
 	"setting": {
 		"urlCheck": true,
@@ -22,7 +23,7 @@
 			"disablePlugins": [],
 			"outputPath": ""
 		},
-		"useCompilerModule": false,
+		"useCompilerModule": true,
 		"userConfirmedUseCompilerModuleSwitch": false
 	},
 	"compileType": "miniprogram",
