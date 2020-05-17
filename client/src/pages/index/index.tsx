@@ -66,11 +66,26 @@ export default function Index(){
       }
     })
   }
-  function addName (value){
+  const addName =  (value)=>{
     setName(value)
   }
-  function addAge (value){
+  const addAge = (value)=>{
     setAge(parseInt(value))
+  }
+  const getCloudFunction = ()=>{
+    wx.cloud.callFunction({
+      name:'getWordsList',
+      // data:{
+      //   a:23,
+      //   b:45
+      // },
+      success(res){
+        console.log('云函数请求成功',res)
+      },
+      fail(err){
+        console.log('云函数请求失败',err)
+      }
+    })
   }
   const delId =(id)=>{
     console.log(id)
@@ -89,6 +104,8 @@ export default function Index(){
       <AtButton onClick={addData} type="secondary">添加数据</AtButton>
       <AtButton onClick={setData} type="primary">修改数据</AtButton>
       <AtButton onClick={delData} type="primary">删除数据</AtButton>
+      ------
+      <AtButton onClick={getCloudFunction} type="secondary">云函数获取</AtButton>
     </View>
   );
 } 
