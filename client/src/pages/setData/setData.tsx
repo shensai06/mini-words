@@ -1,5 +1,5 @@
 import { View, Text } from "@tarojs/components";
-import { AtForm, AtInput, AtButton, AtFloatLayout, AtIcon, AtList, AtListItem, AtTag, AtCard } from 'taro-ui'
+import { AtForm, AtInput, AtButton, AtFloatLayout, AtIcon, AtList, AtListItem, AtTag, AtCard,AtModal, AtModalHeader, AtModalContent, AtModalAction  } from 'taro-ui'
 import { useState, useEffect } from '@tarojs/taro'
 import './SetData.less'
 import '../../utils/xmlJson.js'
@@ -8,6 +8,7 @@ export default function SetData() {
   // 从当前链接中读取id
   const [wordValue, setWordValue] = useState('')
   const [isOpen, setIsOpened] = useState(false)
+  const [isOpenedModel,setIsOpenedModel] = useState(false)
   const [wordData, setWordData] = useState({})
   const [isWord, setIsWord] = useState(false)
   const [data, setDate] = useState({
@@ -96,12 +97,7 @@ export default function SetData() {
       name: 'setWordList',
       data,
       success() {
-        wx.showToast({
-          title: '添加成功',
-          icon: 'success',
-          duration: 2000
-        })
-
+        setIsOpenedModel(true)
       },
       fail(err) {
         wx.showToast({
@@ -119,6 +115,11 @@ export default function SetData() {
   //   return  <AtIcon value='volume-plus' size='30' color='#000' onClick={getColume}></AtIcon>
 
   // }
+  const handleModelConfirm = ()=>{
+    wx.navigateTo({
+      url: '/pages/details/details',
+    })
+  }
   useEffect(() => {
 
   }, [])
@@ -140,10 +141,8 @@ export default function SetData() {
           ?(
             <View>
             <AtCard
-
             extra={data.phonetic}
             title={data.word}
-            
           >
              <AtIcon value='volume-plus' size='30' color='#000' onClick={getColume}></AtIcon>
             {data.translate}
@@ -180,19 +179,32 @@ export default function SetData() {
             </View>
           )}
         </View>
-        <AtButton circle type='primary' size='small' onClick={insertData} >插入编辑</AtButton>
+        
+        <View className="at-bottom-btn">
+        <AtButton   onClick={handleClose} >取消</AtButton>
+        <AtButton  type='primary'  onClick={insertData} >插入编辑</AtButton>
+      
+        </View>
       </AtFloatLayout>
 
       {isWord
-          ?(<View className="page-bottom">
-          <AtButton size='small' >取消</AtButton>
-          <AtButton type='primary' size='small' onClick={saveData}>保存至单词本</AtButton>
+          ?(<View className="at-bottom-btn">
+          <AtButton >取消</AtButton>
+          <AtButton type='primary'  onClick={saveData}>保存至单词本</AtButton>
         </View>):(
           <View></View>
         )
       }
-      
-
+      <AtModal
+        isOpened={isOpenedModel}
+        title='添加成功'
+        cancelText='继续查询'
+        confirmText='去单词本'
+        onClose={ ()=>setIsOpenedModel(false) }
+        onCancel={ ()=>setIsOpenedModel(false) }
+        onConfirm={ handleModelConfirm }
+        content='新增的单词添加至***单词本，点击下方“去单词本”可查看'
+      />
     </View>
   )
 }
