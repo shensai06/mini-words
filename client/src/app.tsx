@@ -23,7 +23,8 @@ class App extends Component {
     pages: [
       'pages/index/index',
       'pages/details/details',
-      'pages/setData/setData' 
+      'pages/setData/setData',
+      'pages/special/special'  
     ],
     window: {
       backgroundTextStyle: 'light',

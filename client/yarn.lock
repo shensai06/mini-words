@@ -9871,6 +9871,26 @@ write@^0.2.1:
   dependencies:
     mkdirp "^0.5.1"
 
+xml2js@~0.2.6:
+  version "0.2.8"
+  resolved "https://registry.npm.taobao.org/xml2js/download/xml2js-0.2.8.tgz#9b81690931631ff09d1957549faf54f4f980b3c2"
+  integrity sha1-m4FpCTFjH/CdGVdUn69U9PmAs8I=
+  dependencies:
+    sax "0.5.x"
+
+xmlbuilder@~0.4.2:
+  version "0.4.3"
+  resolved "https://registry.npm.taobao.org/xmlbuilder/download/xmlbuilder-0.4.3.tgz#c4614ba74e0ad196e609c9272cd9e1ddb28a8a58"
+  integrity sha1-xGFLp04K0ZbmCcknLNnh3bKKilg=
+
+xmljson@^0.2.0:
+  version "0.2.0"
+  resolved "https://registry.npm.taobao.org/xmljson/download/xmljson-0.2.0.tgz#e2d121d13c682c6964f6ae9c1a0be8a3cce8866c"
+  integrity sha1-4tEh0TxoLGlk9q6cGgvoo8zohmw=
+  dependencies:
+    xml2js "~0.2.6"
+    xmlbuilder "~0.4.2"
+
 xregexp@4.0.0:
   version "4.0.0"
   resolved "https://registry.npm.taobao.org/xregexp/download/xregexp-4.0.0.tgz#e698189de49dd2a18cc5687b05e17c8e43943020"

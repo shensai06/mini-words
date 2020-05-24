@@ -1,111 +1,192 @@
-import Taro from '@tarojs/taro'
-import { View, Button, Text } from '@tarojs/components'
-import { useEffect, useLayoutEffect, useReducer, useState, useContext, useRef, useCallback, useMemo } from '@tarojs/taro'
-import { AtInput, AtForm,AtButton } from 'taro-ui'
-import './index.less'
+import { View, Button, Text } from "@tarojs/components";
+import {
+  useEffect,
+  useLayoutEffect,
+  useReducer,
+  useState,
+  useContext,
+  useRef,
+  useCallback,
+  useMemo,
+  useRouter
+} from "@tarojs/taro";
+import {
+  AtInput,
+  AtForm,
+  AtButton,
+  AtGrid,
+  AtModal,
+  AtModalHeader,
+  AtTextarea,
+  AtModalContent,
+  AtModalAction,
+  AtRadio
+} from "taro-ui";
+import "./index.less";
 
-wx.cloud.init({
-  env:'shem-0631c'
-})
-const DB = wx.cloud.database().collection('list')
-export default function Index(){
-  const [count, setCount] = useState(0);
-  const [age, setAge] = useState<number>();
-  const [name, setName] = useState<string>('');
-  const [deleteId, setDelId] = useState<string>('');
-  const addData =  ()=>{
-    DB.add({
-      data:{
-        name,
-        age
+const url = "https://7368-shem-0631c-1301105157.tcb.qcloud.la/static/images/";
+const defaultData = [
+  {
+    image: url + "add.png",
+    value: "添加",
+    id: 0
+  }
+];
+
+export default function Index() {
+  const router = useRouter();
+  const [pageName, setPageName] = useState("");
+  const [specialId, setSpecialId] = useState("");
+  const [mode, setMode] = useState("square");
+  const [isOpened, setIsOpened] = useState(false);
+  const [imageValue, setImageValue] = useState("code-a");
+  const [addData, setAddData] = useState({
+    value: "",
+    abstract: "",
+    image: url + "code-a",
+    rootTypeId: 0 // 此页面添加的默认都是根级别
+  });
+
+  const [data, setData] = useState();
+
+  const getData = id => {
+    Taro.cloud.callFunction({
+      name: "getWordType",
+      data: { id },
+      success(res) {
+        if (res && res.result) {
+          setData(res.result.data.concat(defaultData));
+        }
       },
-      success(res){
-        console.log('添加成功',res)
-      },
-      fail(err){
-        console.log('添加失败',err)
+      fail(err) {
+        Taro.showToast({
+          title: "获取失败" + err,
+          icon: "none",
+          duration: 2000
+        });
       }
+    });
+  };
 
-    })
-  }
-  const getData = ()=>{
+  const handleSkip = e => {
+    if (e.id === 0) {
+      return setIsOpened(true);
+    }
+    if (specialId) {
+      Taro.navigateTo({
+        url: "/pages/details/details?specialId=" + specialId
+      });
+    }
+    console.log("点击参数", e);
+    Taro.navigateTo({
+      url: "/pages/index/index?id=" + e._id + "&name=" + e.value
+    });
+  };
 
-    DB.get({
-      success(res){
-        console.log('查询成功',res)
+  const handleIsOpened = () => {
+    setIsOpened(false);
+  };
+  const handleOk = () => {
+    handleIsOpened();
+    //  插入数据
+    console.log("specialId", specialId);
+    setTimeout(function() {
+      Taro.hideLoading();
+    }, 10000);
+    Taro.cloud.callFunction({
+      name: "setWordType",
+      data: {
+        ...addData,
+        image: url + imageValue + ".png",
+        rootTypeId: specialId
       },
-      fail(err){
-        console.log('查询失败',err)
+      success() {
+        Taro.hideLoading();
+        Taro.showToast({
+          title: "添加成功",
+          duration: 2000
+        });
+        return getData(specialId);
+      },
+      fail(err) {
+        Taro.hideLoading();
+        console.log(err);
+        Taro.showToast({
+          title: "添加失败" + err,
+          icon: "none",
+          duration: 2000
+        });
       }
+    });
+  };
+  const handleAbstract = e => {
+    setAddData({ ...addData, abstract: e });
+    console.log(e);
+  };
+  const handleValue = e => {
+    setAddData({ ...addData, value: e });
+  };
+  //
+  const handleChangeImage = e => {
+    setImageValue(e);
+  };
+  useEffect(() => {
+    console.log(router.params);
+    router.params.id ? setMode("rect") : setMode("square");
+    setSpecialId(router.params.id);
+    setPageName(router.params.name);
+    getData(router.params.id);
+  }, []);
 
-    })
-  }
-  const delData = ()=>{
-
-    DB.doc(deleteId).remove({
-      success(res){
-        console.log('删除成功',res)
-      },
-      fail(err){
-        console.log('删除失败',err)
-      }
-
-    })
-  }
-  const setData = ()=>{
-    DB.doc(deleteId).update({
-      data:{
-        name,
-        age
-      },
-      success(res){
-        console.log('修改成功',res)
-      },
-      fail(err){
-        console.log('修改失败',err)
-      }
-    })
-  }
-  const addName =  (value)=>{
-    setName(value)
-  }
-  const addAge = (value)=>{
-    setAge(parseInt(value))
-  }
-  const getCloudFunction = ()=>{
-    wx.cloud.callFunction({
-      name:'getWordsList',
-      // data:{
-      //   a:23,
-      //   b:45
-      // },
-      success(res){
-        console.log('云函数请求成功',res)
-      },
-      fail(err){
-        console.log('云函数请求失败',err)
-      }
-    })
-  }
-  const delId =(id)=>{
-    console.log(id)
-    setDelId(id)
-  }
-  useEffect(()=>{
-    console.log(3)
-  },[])
   return (
     <View>
-      <view>云函数数据测试</view>
-      <AtButton type='primary' onClick={getData}>查询数据</AtButton>
-      <AtInput placeholder='删除的id' name="id" type="number" onChange={delId} />
-      <AtInput placeholder='输入名字' name="name" type="text" onChange={addName} />
-      <AtInput placeholder='输入年龄' name="age" type="number" onChange={addAge} />
-      <AtButton onClick={addData} type="secondary">添加数据</AtButton>
-      <AtButton onClick={setData} type="primary">修改数据</AtButton>
-      <AtButton onClick={delData} type="primary">删除数据</AtButton>
-      ------
-      <AtButton onClick={getCloudFunction} type="secondary">云函数获取</AtButton>
+      <View className="'min-title'">{pageName || "超级单词本"}</View>
+      <AtGrid data={data} mode={mode} onClick={handleSkip} />
+      <AtModal isOpened={isOpened}>
+        <AtModalHeader>添加分类</AtModalHeader>
+        <AtModalContent>
+          <AtInput
+            name="value"
+            // title="名称"
+            type="text"
+            placeholder="输入名称"
+            value={addData.value}
+            onChange={handleValue}
+          />
+          <AtTextarea
+            value={addData.abstract}
+            onChange={handleAbstract}
+            maxLength={200}
+            placeholder="输入简介..."
+          />
+          <AtRadio
+            options={[
+              {
+                label: "code-a",
+                value: "code-a"
+              },
+              {
+                label: "code-b",
+                value: "code-b"
+              },
+              {
+                label: "code-c",
+                value: "code-c"
+              },
+              {
+                label: "code-d",
+                value: "code-d"
+              }
+            ]}
+            value={imageValue}
+            onClick={handleChangeImage}
+          />
+        </AtModalContent>
+        <AtModalAction>
+          <Button onClick={handleIsOpened}>取消</Button>{" "}
+          <Button onClick={handleOk}>确定</Button>
+        </AtModalAction>
+      </AtModal>
     </View>
   );
-} 
+}

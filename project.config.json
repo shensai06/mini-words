@@ -23,7 +23,7 @@
 			"disablePlugins": [],
 			"outputPath": ""
 		},
-		"useCompilerModule": false,
+		"useCompilerModule": true,
 		"userConfirmedUseCompilerModuleSwitch": false
 	},
 	"compileType": "miniprogram",
@@ -56,7 +56,7 @@
 					"id": 0,
 					"name": "pages/details/details",
 					"pathName": "pages/details/details",
-					"query": "",
+					"query": "specialId=b05d218a5eca440e001e7c1b550b4f29",
 					"scene": null
 				},
 				{
@@ -70,6 +70,7 @@
 					"id": -1,
 					"name": "pages/setData/setData",
 					"pathName": "pages/setData/setData",
+					"query": "",
 					"scene": null
 				}
 			]
